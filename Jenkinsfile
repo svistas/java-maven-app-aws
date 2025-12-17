@@ -22,7 +22,10 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    echo "Deploying the application..."
+                    def dockerCmd = "docker run -d -p 8080:80 sofiavistas/react-counter-app:latest"
+                    sshagent(['ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no  ec2-user@13.61.146.89 ${dockerCmd}"
+                    }
                 }
             }
         }               
